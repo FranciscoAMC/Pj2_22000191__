@@ -20,7 +20,7 @@ public class AFD{
 	*/
 	public AFD(String path){
 		instrucciones = path;
-		System.out.println(instrucciones);
+		int tamanio = instrucciones.length();
 	}
 
 	/*
