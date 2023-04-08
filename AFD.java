@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 /*
 	Utilice esta clase para guardar la informacion de su
@@ -23,12 +25,20 @@ public class AFD{
 			Scanner scanner = new Scanner(file);
 			String estados = scanner.nextLine();
 			String finales = scanner.nextLine();
-			String lenguaje = scanner.nextLine();
-			String[] trans1 = scanner.nextLine().split(",");
-			System.out.println("Lenguaje: " + lenguaje);
-			System.out.println("Transiciones primer caracter: " + trans1);
+			String[] lenguaje = scanner.nextLine().split(",");
+			ArrayList<String> caracteres = new ArrayList<String>();
+			for (int j = 0; j < lenguaje.length; j++) {
+				caracteres.add(lenguaje[j]);
+			}
+			System.out.println("Lenguaje: " + caracteres);
+			ArrayList<String> transiciones;
 			while (scanner.hasNextLine()) {
-				System.out.println(scanner.nextLine());
+				transiciones = new ArrayList<String>();
+				String[] trans1 = scanner.nextLine().split(",");
+				for (int k = 0; k < trans1.length; k++) {
+					transiciones.add(trans1[k]);
+				}
+				System.out.println("Transiciones: " + transiciones);
 			}
 		} catch (FileNotFoundException s) {
 			s.printStackTrace();
