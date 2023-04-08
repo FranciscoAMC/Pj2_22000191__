@@ -1,5 +1,7 @@
-import java.nio.file.Path;
-import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.FileAlreadyExistsException;
+import java.util.Scanner;
 /*
 	Utilice esta clase para guardar la informacion de su
 	AFD. NO DEBE CAMBIAR LOS NOMBRES DE LA CLASE NI DE LOS 
@@ -7,9 +9,6 @@ import java.util.List;
 	agregar los campos y metodos que desee.
 */
 public class AFD{
-	int estado;
-	String instrucciones;
-
 	
 	/*
 		Implemente el constructor de la clase AFD
@@ -19,8 +18,22 @@ public class AFD{
 		Puede utilizar la estructura de datos que desee
 	*/
 	public AFD(String path){
-		instrucciones = path;
-		int tamanio = instrucciones.length();
+		File file = new File(path);
+		try {
+			Scanner scanner = new Scanner(file);
+			String estados = scanner.nextLine();
+			String finales = scanner.nextLine();
+			String lenguaje = scanner.nextLine();
+			String[] trans1 = scanner.nextLine().split(",");
+			System.out.println("Lenguaje: " + lenguaje);
+			System.out.println("Transiciones primer caracter: " + trans1);
+			while (scanner.hasNextLine()) {
+				System.out.println(scanner.nextLine());
+			}
+		} catch (FileNotFoundException s) {
+			s.printStackTrace();
+		}
+
 	}
 
 	/*
@@ -31,6 +44,7 @@ public class AFD{
 	*/
 	public int getTransition(int currentState, char symbol){
 		return 0;
+		//Si llega a un estado final, la cuerda es acceptada y devuelve true, si no llega es false
 	}
 
 	/*
@@ -50,6 +64,9 @@ public class AFD{
 		por el afd
 	*/
 	public boolean[] evaluateMany(String[] strings){
+		/*for (int i = 0; i < strings.length; i ++) {
+			System.out.println(strings[i]);
+		}*/
 		return new boolean[0];
 	}
 
