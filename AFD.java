@@ -10,8 +10,15 @@ import java.util.Scanner;
 	METODOS que ya existen, sin embargo, usted es libre de 
 	agregar los campos y metodos que desee.
 */
+
 public class AFD{
-	
+	private String estados;
+	private String[] finales;
+	private String[] lenguaje;
+	private ArrayList<String> caracteres;
+	private ArrayList<String> transiciones;
+	private ArrayList<ArrayList> listado;
+	static int estadoIni = 1;
 	/*
 		Implemente el constructor de la clase AFD
 		que recibe como argumento un string que 
@@ -20,30 +27,35 @@ public class AFD{
 		Puede utilizar la estructura de datos que desee
 	*/
 	public AFD(String path){
+		//System.out.println("Aqui empieza");
 		File file = new File(path);
 		try {
 			Scanner scanner = new Scanner(file);
-			String estados = scanner.nextLine();
-			String finales = scanner.nextLine();
-			String[] lenguaje = scanner.nextLine().split(",");
-			ArrayList<String> caracteres = new ArrayList<String>();
+			estados = scanner.nextLine();
+			finales = scanner.nextLine().split(",");
+			lenguaje = scanner.nextLine().split(",");
+			caracteres = new ArrayList<String>();
 			for (int j = 0; j < lenguaje.length; j++) {
 				caracteres.add(lenguaje[j]);
 			}
-			System.out.println("Lenguaje: " + caracteres);
-			ArrayList<String> transiciones;
+			listado = new ArrayList<ArrayList>();
 			while (scanner.hasNextLine()) {
 				transiciones = new ArrayList<String>();
 				String[] trans1 = scanner.nextLine().split(",");
 				for (int k = 0; k < trans1.length; k++) {
 					transiciones.add(trans1[k]);
 				}
-				System.out.println("Transiciones: " + transiciones);
+				listado.add(transiciones);
 			}
+			scanner.close();
+			//System.out.println("1 " + listado.get(1));
+			/*String stringNumero = "123";
+			int numeroEntero = Integer.parseInt(stringNumero);
+			System.out.println("Numero entero: " + numeroEntero);*/
 		} catch (FileNotFoundException s) {
 			s.printStackTrace();
 		}
-
+		
 	}
 
 	/*
@@ -53,9 +65,27 @@ public class AFD{
 		un entero que representa el siguiente estado
 	*/
 	public int getTransition(int currentState, char symbol){
-		return 0;
-		//Si llega a un estado final, la cuerda es acceptada y devuelve true, si no llega es false
+		//Apartir de aqui comienza un ciclo para encontrar la posicion del caracter	  
+		int c = 0;
+		int posicion = 0;
+		for(String caracter : caracteres){
+			//System.out.println(c);
+			if (String.valueOf(symbol).equals(caracter)) {
+				//System.out.println("Si es igual");
+				posicion = c;
+				//System.out.println("posicion: " + c);
+			}
+			//System.out.println(caracter);
+			c = c + 1;
+		}
+		// Con esto podemos hacer el getTransition()
+		String state = listado.get(posicion).get(currentState).toString();
+		int newTran = Integer.parseInt(state); 
+		//System.out.println("Trancision: " + newTran);
+		return newTran;
+		//return 0;
 	}
+
 
 	/*
 		Implemente el metodo evaluate, que recibe como argumento
@@ -64,7 +94,23 @@ public class AFD{
 		por el afd
 	*/
 	public boolean evaluate(String string){
-		return false;
+		//return false;
+		String cuerda = string;
+		boolean aceptada = false;
+		//System.out.println("Cuerda: " + string);
+		if (cuerda.length() != 0) {
+			char elemento = cuerda.charAt(0);
+			estadoIni = getTransition(estadoIni, elemento);
+			String siguiente = cuerda.substring(1);
+			evaluate(siguiente);
+		}
+		
+		if (isFinal(estadoIni)) {
+			aceptada = true;
+		} else {
+			aceptada = false;
+		}
+		return aceptada;
 	}
 
 	/*
@@ -74,10 +120,14 @@ public class AFD{
 		por el afd
 	*/
 	public boolean[] evaluateMany(String[] strings){
-		/*for (int i = 0; i < strings.length; i ++) {
-			System.out.println(strings[i]);
-		}*/
-		return new boolean[0];
+		//return new boolean[0];
+		boolean result;
+		boolean[] resultado = new boolean[strings.length];
+		for (int i = 0; i < strings.length; i ++) {
+			result = evaluate(strings[i]);
+			resultado[i] = result;
+		}
+		return resultado;
 	}
 
 	/*
@@ -85,6 +135,17 @@ public class AFD{
 		es un estado final, y false si no lo es
 	*/
 	public boolean isFinal(int currentState){
-		return true;
+		//return false;
+		boolean salida = false; 
+		ArrayList<Integer> fin = new ArrayList<Integer>();
+		for (int k = 0; k < finales.length; k++) {
+			fin.add(Integer.parseInt(finales[k]));
+		}
+		//System.out.println("Finales: " + fin);
+		if (fin.contains(currentState)) {
+			  salida = true; 
+		}
+		//System.out.println("Aqui termina");
+		return salida;
 	}
 }
