@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 /*
-	Utilice esta clase para guardar la informacion de su
-	AFD. NO DEBE CAMBIAR LOS NOMBRES DE LA CLASE NI DE LOS 
-	METODOS que ya existen, sin embargo, usted es libre de 
-	agregar los campos y metodos que desee.
+Utilice esta clase para guardar la informacion de su
+AFD. NO DEBE CAMBIAR LOS NOMBRES DE LA CLASE NI DE LOS 
+METODOS que ya existen, sin embargo, usted es libre de 
+agregar los campos y metodos que desee.
 */
 
 public class AFD{
@@ -48,10 +48,7 @@ public class AFD{
 				listado.add(transiciones);
 			}
 			scanner.close();
-			//System.out.println("1 " + listado.get(1));
-			/*String stringNumero = "123";
-			int numeroEntero = Integer.parseInt(stringNumero);
-			System.out.println("Numero entero: " + numeroEntero);*/
+			
 		} catch (FileNotFoundException s) {
 			s.printStackTrace();
 		}
@@ -65,25 +62,19 @@ public class AFD{
 		un entero que representa el siguiente estado
 	*/
 	public int getTransition(int currentState, char symbol){
-		//Apartir de aqui comienza un ciclo para encontrar la posicion del caracter	  
+		//Apartir de aqui comienza un ciclo para encontrar la posicion del caracter	 
 		int c = 0;
 		int posicion = 0;
 		for(String caracter : caracteres){
-			//System.out.println(c);
 			if (String.valueOf(symbol).equals(caracter)) {
-				//System.out.println("Si es igual");
 				posicion = c;
-				//System.out.println("posicion: " + c);
 			}
-			//System.out.println(caracter);
 			c = c + 1;
 		}
 		// Con esto podemos hacer el getTransition()
 		String state = listado.get(posicion).get(currentState).toString();
-		int newTran = Integer.parseInt(state); 
-		//System.out.println("Trancision: " + newTran);
+		int newTran = Integer.parseInt(state);
 		return newTran;
-		//return 0;
 	}
 
 
@@ -94,12 +85,11 @@ public class AFD{
 		por el afd
 	*/
 	public boolean evaluate(String string){
-		//return false;
 		String cuerda = string;
 		boolean aceptada = false;
-		//System.out.println("Cuerda: " + string);
 		if (cuerda.length() != 0) {
 			char elemento = cuerda.charAt(0);
+			System.out.println("Evaluate estado inicial: " + estadoIni);
 			estadoIni = getTransition(estadoIni, elemento);
 			String siguiente = cuerda.substring(1);
 			evaluate(siguiente);
@@ -120,10 +110,11 @@ public class AFD{
 		por el afd
 	*/
 	public boolean[] evaluateMany(String[] strings){
-		//return new boolean[0];
 		boolean result;
 		boolean[] resultado = new boolean[strings.length];
 		for (int i = 0; i < strings.length; i ++) {
+			estadoIni = 1;
+			System.out.println("Evaluando cuerda: " + i);
 			result = evaluate(strings[i]);
 			resultado[i] = result;
 		}
@@ -141,11 +132,9 @@ public class AFD{
 		for (int k = 0; k < finales.length; k++) {
 			fin.add(Integer.parseInt(finales[k]));
 		}
-		//System.out.println("Finales: " + fin);
 		if (fin.contains(currentState)) {
-			  salida = true; 
+			salida = true;
 		}
-		//System.out.println("Aqui termina");
 		return salida;
 	}
 }
